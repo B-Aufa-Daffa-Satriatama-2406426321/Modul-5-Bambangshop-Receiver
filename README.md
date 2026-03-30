@@ -86,4 +86,8 @@ This is the place for you to write reflections:
 
 #### Reflection Subscriber-1
 
+1. Vec<Notification> diakses oleh banyak request secara bersamaan, jadi kita perlu sinkronisasi agar tidak terjadi data race. RwLock cocok karena banyak operasi hanya membaca (list), sehingga banyak reader bisa berjalan paralel, sementara write tetap eksklusif. Jika pakai Mutex, semua akses (termasuk baca) akan saling blokir, membuat throughput lebih rendah.
+
+2. Rust tidak mengizinkan mutasi langsung pada static karena harus thread-safe dan tidak memicu data race. static di Rust harus bertipe sync dan aman diakses bersamaan. Mutasi tanpa sinkronisasi dianggap unsafe. Karena itu dipakai lazy_static + primitif sinkronisasi (conthonya pakai RwLock, Mutex, DashMap) agar mutasi tetap aman secara concurrency, berbeda dengan Java yang mengandalkan model memori dan sinkronisasi eksplisit di level runtime.
+
 #### Reflection Subscriber-2
