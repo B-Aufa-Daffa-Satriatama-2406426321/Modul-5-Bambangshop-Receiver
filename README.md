@@ -91,3 +91,9 @@ This is the place for you to write reflections:
 2. Rust tidak mengizinkan mutasi langsung pada static karena harus thread-safe dan tidak memicu data race. static di Rust harus bertipe sync dan aman diakses bersamaan. Mutasi tanpa sinkronisasi dianggap unsafe. Karena itu dipakai lazy_static + primitif sinkronisasi (conthonya pakai RwLock, Mutex, DashMap) agar mutasi tetap aman secara concurrency, berbeda dengan Java yang mengandalkan model memori dan sinkronisasi eksplisit di level runtime.
 
 #### Reflection Subscriber-2
+
+1. Dari lib.rs terdapat setup dari project ini. mulai dari inisialisasi state global hingga routing.
+
+2. Observer pattern memudahkan menambah subscriber karena publisher cukup menyimpan daftar endpoint dan melakukan broadcast. Dengan demikian, subscriber baru hanya perlu melakukan subscribe tanpa mengubah kode publisher.
+
+3. Sebenarnya belum mencoba meng-enchance dokumentasi di postman, tapi sepertinya akan sangat membantu karena kita tidak perlu membaca ulang kode lagi untuk memahami setiap fungsi setiap endpoint

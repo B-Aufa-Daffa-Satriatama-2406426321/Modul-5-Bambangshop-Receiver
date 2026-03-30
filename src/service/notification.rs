@@ -10,25 +10,6 @@ use crate::model::notification::Notification;
 use crate::model::subscriber::{self, SubscriberRequest};
 use crate::repository::notification::NotificationRepository;
 
-pub struct NotificationService;
-
-impl NotificationService{
-
-    pub fn list_messages() -> Result<Vec<String>> {
-        return Ok(NotificationRepository::list_all_as_string());
-    }
-
-    pub fn receive_notification(payload: Notification) -> Result<Notification> {
-        let subscriber_result: Notification = NotificationRepository::add(payload);
-        return Ok(subscriber_result);
-    }
-
-    pub fn subscribe(product_type: &str) -> Result<SubscriberRequest> {
-        let product_type_clone = String::from(product_type);
-        return thread::spawn(move || Self::subscribe_request(product_type_clone))
-            .join().unwrap();
-    }
-
     #[tokio::main]
     async fn subscribe_request(product_type: String) -> Result<SubscriberRequest> {
         let product_type_upper: String = product_type.to_uppercase();
@@ -64,6 +45,27 @@ impl NotificationService{
             ))
         }
     }
+    
+pub struct NotificationService;
+
+impl NotificationService{
+
+    pub fn list_messages() -> Result<Vec<String>> {
+        return Ok(NotificationRepository::list_all_as_string());
+    }
+
+    pub fn receive_notification(payload: Notification) -> Result<Notification> {
+        let subscriber_result: Notification = NotificationRepository::add(payload);
+        return Ok(subscriber_result);
+    }
+
+    pub fn subscribe(product_type: &str) -> Result<SubscriberRequest> {
+        let product_type_clone = String::from(product_type);
+        return thread::spawn(move || Self::subscribe_request(product_type_clone))
+        .join().unwrap();
+    }
+
+
 
 
 
